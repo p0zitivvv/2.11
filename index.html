@@ -6,6 +6,8 @@
 <title>Быть услышанным — статья 73 АППК простыми словами</title>
 <meta name="description" content="Право на заслушивание по статье 73 АППК Казахстана: сроки, формы участия, образец возражения, тест и практические задания для граждан.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@700;800&display=swap">
+<!-- Подключаем клиент Supabase для работы с облачной базой -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:light;--navy:#142D4E;--teal:#087E8B;--bg:#F7FAFC;--tx:#1E293B;--tx2:#526277;--line:#DFE7EF;--gold:#C7A46A;--ok:#166534;--err:#B42318;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
@@ -60,7 +62,8 @@ blockquote{margin:16px 0;padding:18px 22px;background:#fff;border-left:4px solid
 .err{color:var(--err);font-weight:600;min-height:1.6em}
 .rev{border-top:1px solid var(--line);padding:14px 0}
 .good{color:var(--ok);font-weight:600}.bad{color:var(--err);font-weight:600}
-textarea{width:100%;min-height:150px;border:1px solid #9FB0C3;border-radius:10px;padding:12px;font:inherit;resize:vertical}
+input[type="email"], textarea{width:100%;border:1px solid #9FB0C3;border-radius:10px;padding:12px;font:inherit}
+textarea{min-height:150px;resize:vertical}
 .crit{background:var(--bg);border-radius:12px;padding:14px 18px;margin-top:12px}
 .tasks{display:grid;gap:20px}
 footer{background:var(--navy);color:#DCE6F0;padding:48px 0;font-size:16px}
@@ -89,7 +92,7 @@ nav a{display:block;padding:12px 0}
 <a class="logo" href="#top">Быть услышанным</a>
 <button id="mb" aria-expanded="false" aria-controls="nav">Меню</button>
 <nav id="nav" aria-label="Основное меню"><ul>
-<li><a href="#about">О праве</a></li><li><a href="#how">Как действовать</a></li><li><a href="#samples">Образцы</a></li><li><a href="#test">Тест</a></li><li><a href="#practice">Практика</a></li><li><a href="#sources">Источники</a></li>
+<li><a href="#about">О праве</a></li><li><a href="#how">Как действовать</a></li><li><a href="#samples">Образцы</a></li><li><a href="#test">Тест</a></li><li><a href="#practice">Практика</a></li><li><a href="#reviews">Отзывы</a></li><li><a href="#sources">Источники</a></li>
 </ul></nav>
 </div>
 </header>
@@ -180,7 +183,26 @@ nav a{display:block;padding:12px 0}
 <div class="tasks" id="tasks"></div>
 </div></section>
 
-<section id="sources" class="alt"><div class="wrap col">
+<section id="reviews" class="alt"><div class="wrap col">
+<h2>Отзывы</h2>
+<p>Поделитесь вашими впечатлениями о материале или задайте вопрос. Ваш отзыв увидят все посетители сайта.</p>
+<form id="reviewForm" class="card big" style="margin-bottom: 28px;">
+<div style="margin-bottom: 16px;">
+<label for="reviewEmail" style="display: block; font-weight: 600; margin-bottom: 8px;">Ваш Email</label>
+<input type="email" id="reviewEmail" required placeholder="example@mail.kz">
+<p class="note" style="margin-top: 4px;">Email не публикуется на сайте и нужен только для обратной связи.</p>
+</div>
+<div style="margin-bottom: 16px;">
+<label for="reviewText" style="display: block; font-weight: 600; margin-bottom: 8px;">Ваш отзыв</label>
+<textarea id="reviewText" required placeholder="Напишите ваше мнение или комментарий..."></textarea>
+</div>
+<p class="err" id="reviewErr" role="alert"></p>
+<button type="submit" class="btn" id="submitBtn">Опубликовать отзыв</button>
+</form>
+<div id="reviewsContainer"><p class="note">Загрузка отзывов...</p></div>
+</div></section>
+
+<section id="sources"><div class="wrap col">
 <h2>Источники</h2>
 <h3 style="margin-top:0">Проверяйте информацию по официальным источникам</h3>
 <p>АППК Республики Казахстан, статьи 3, 73, 74 и 91.</p>
@@ -208,11 +230,11 @@ var Q=[
 ["Какие формы заслушивания предусмотрены статьёй 73?",["Только личная встреча в помещении органа","Письменная и устная формы","Только письменный ответ на бумаге","Только общение по видеосвязи"],1,"Статья 73 допускает письменную и устную формы заслушивания."],
 ["В каком случае при заслушивании ведётся протокол?",["При устном выражении участником возражений","При любом направлении предварительного решения","Только после подачи жалобы в суд","При любом письменном возражении"],0,"При устных возражениях ведётся протокол. При письменной форме заслушивания протокол не ведётся."],
 ["Участник надлежащим образом и заблаговременно извещён о форме, дне, времени и месте заслушивания, но возражений не представил. Что предусматривает статья 73?",["Требования участника автоматически удовлетворяются","Предварительное решение автоматически отменяется","Процедура обязательно откладывается до получения возражений","Отсутствие возражений не препятствует решению дела по существу"],3,"Часть 3 статьи 73 прямо допускает принятие решения по существу при отсутствии возражений надлежаще извещённого участника."],
-["В каком из перечисленных случаев часть 2 статьи 73 допускает неприменение заслушивания?",["Сотрудник загружен другими обращениями","Предварительное решение подготовлено по шаблону","Принимается благоприятный акт, не затрагивающий права, свободы и законные интересы других лиц","Сотрудник заранее считает возражения бесполезными"],2,"Благоприятный акт с указанным условием является предусмотренным законом исключением."],
+["В каком из перечисленных случаев часть 2 статьи 73 допускает неприменение заслушивания?",["Сотрудник занят другими обращениями","Предварительное решение подготовлено по шаблону","Принимается благоприятный акт, не затрагивающий права, свободы и законные интересы других лиц","Сотрудник заранее считает возражения бесполезными"],2,"Благоприятный акт с указанным условием является предусмотренным законом исключением."],
 ["Орган не проводит заслушивание из-за необходимости немедленно принять акт для защиты прав или общественных и государственных интересов. Что он обязан сделать по статье 73?",["Указать в административном акте доводы непроведения заслушивания","Указать причины только при личной встрече с заявителем","Заменить мотивировку ссылкой на занятость сотрудников","Сообщить причины только после обращения гражданина в суд"],0,"При исключении по подпункту 4) части 2 статьи 73 причины непроведения заслушивания указываются в административном акте."],
 ["Может ли ходатайство самого участника быть основанием для неприменения заслушивания?",["Нет, заслушивание обязательно без каких-либо исключений","Да, такое основание предусмотрено частью 2 статьи 73","Да, но только если предварительное решение уже обжаловано в суд","Нет, это возможно только по просьбе другого заявителя"],1,"Подпункт 5) части 2 статьи 73 предусматривает соответствующее ходатайство участника как исключение."],
 ["Какой установленный законодательством срок административной процедуры назван в части 2 статьи 73 как основание для неприменения заслушивания?",["Ровно пять рабочих дней","Менее десяти рабочих дней","Менее пяти рабочих дней","Любой срок, назначенный исполнителем по своему усмотрению"],2,"В статье указан срок менее пяти рабочих дней, установленный законодательством, а не произвольный срок исполнителя."],
-["Что соответствует определению письменного заслушивания в примечании к статье 73?",["Заявителю направили только окончательный отказ","Заявитель получил приглашение, но предварительного решения ему не направляли","Сотрудник составил внутреннюю записку без участия заявителя","Участнику направили предварительное решение и получили его письменные возражения на бумаге или в цифровой форме"],3,"Примечание описывает направление предварительного решения с последующим получением письменных возражений."]
+["Что соответствует определению письменного заслушивания в примечании к статье 73?",["Заявителю направили только окончательный отказ","Заявитель получил приглашение, но предварительного решения ему не направляли","Сотрудник составил внутреннюю записку без участия заявителя","Участнику направили предварительное решение и получили его письменные возражения на бумаге или в цифровой форме"],3,"Примечание описывает направление предварительного решения с последующим получение письменных возражений."]
 ];
 var L="АБВГ",A=[],i=0,box=document.getElementById('quiz');
 function show(){
@@ -266,6 +288,115 @@ T.forEach(function(t,k){
   try{navigator.clipboard.writeText(v).then(ok,fail)}catch(e){fail()}
  };
 });
+
+// --- ПОДКЛЮЧЕНИЕ К SUPABASE (ТАБЛИЦА Alim) ---
+const SUPABASE_URL = 'https://pnsgryxjqjsqyeajngrf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_rn7O_0VV_PqhyfJwoe23xg_yDcccB1o'; // Вставьте сюда ваш анонимный ключ (anon public) из панели Supabase
+
+var supabaseClient = null;
+try {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch(e) {
+  console.error("Ошибка инициализации Supabase:", e);
+}
+
+var reviewForm = document.getElementById('reviewForm');
+var reviewEmail = document.getElementById('reviewEmail');
+var reviewText = document.getElementById('reviewText');
+var reviewErr = document.getElementById('reviewErr');
+var reviewsContainer = document.getElementById('reviewsContainer');
+var submitBtn = document.getElementById('submitBtn');
+
+// Загрузка отзывов из таблицы Alim
+async function loadReviews() {
+  if (!supabaseClient || SUPABASE_ANON_KEY.includes('ВАШ_')) {
+    reviewsContainer.innerHTML = '<p class="note" style="color:var(--err)">Не указан ключ Supabase. Вставьте ваш ключ в переменную SUPABASE_ANON_KEY.</p>';
+    return;
+  }
+
+  try {
+    var { data, error } = await supabaseClient
+      .from('Alim')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    renderReviews(data || []);
+  } catch (err) {
+    console.error(err);
+    reviewsContainer.innerHTML = '<p class="note" style="color:var(--err)">Ошибка загрузки отзывов из базы данных.</p>';
+  }
+}
+
+function renderReviews(reviews) {
+  if (reviews.length === 0) {
+    reviewsContainer.innerHTML = '<p class="note">Пока нет отзывов. Станьте первым!</p>';
+    return;
+  }
+  var h = '';
+  reviews.forEach(function(r) {
+    var maskedEmail = r.email ? r.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : 'Аноним';
+    var dateObj = new Date(r.created_at);
+    var dateStr = !isNaN(dateObj) ? dateObj.toLocaleDateString('ru-RU') : 'недавно';
+    
+    h += '<div class="card" style="margin-bottom: 16px; padding: 20px;">' +
+         '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--tx2);">' +
+         '<span><b>'+maskedEmail+'</b></span>' +
+         '<span>'+dateStr+'</span>' +
+         '</div>' +
+         '<p style="margin: 0; white-space: pre-wrap;">'+escapeHtml(r.text || '')+'</p>' +
+         '</div>';
+  });
+  reviewsContainer.innerHTML = h;
+}
+
+function escapeHtml(text) {
+  var map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '#'};
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+reviewForm.onsubmit = async function(e) {
+  e.preventDefault();
+  var email = reviewEmail.value.trim();
+  var text = reviewText.value.trim();
+  
+  if (!email || !text) {
+    reviewErr.textContent = 'Пожалуйста, заполните все поля.';
+    return;
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    reviewErr.textContent = 'Введите корректный email адрес.';
+    return;
+  }
+  if (!supabaseClient || SUPABASE_ANON_KEY.includes('ВАШ_')) {
+    reviewErr.textContent = 'Сначала укажите anon-ключ Supabase в коде.';
+    return;
+  }
+
+  reviewErr.textContent = '';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Отправка...';
+
+  try {
+    var { error } = await supabaseClient
+      .from('Alim')
+      .insert([{ email: email, text: text }]);
+
+    if (error) throw error;
+
+    reviewEmail.value = '';
+    reviewText.value = '';
+    await loadReviews(); // Обновляем список на странице
+  } catch (err) {
+    console.error(err);
+    reviewErr.textContent = 'Не удалось отправить отзыв. Проверьте права доступа (RLS) в Supabase.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Опубликовать отзыв';
+  }
+};
+
+loadReviews();
 </script>
 </body>
 </html>
